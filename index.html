@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Anti-Spam Game Style</title>
+    <title>Logo Game Style - Motion Update</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     
     <style>
@@ -24,7 +24,6 @@
             position: relative;
         }
 
-        /* Wrapper sekarang memenuhi layar agar logo bisa pindah kemana saja */
         .game-wrapper {
             position: absolute;
             width: var(--logo-size);
@@ -35,8 +34,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Transisi halus saat pindah posisi */
-            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1); 
+            /* Easing Expo Out untuk perpindahan yang sangat halus */
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
             z-index: 10;
         }
 
@@ -47,7 +46,8 @@
             cursor: pointer;
             -webkit-user-drag: none;
             transition: transform var(--transition-speed) var(--easing-bouncy), 
-                        filter var(--transition-speed) ease;
+                        filter 0.3s ease,
+                        opacity 0.3s ease;
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
         }
 
@@ -56,22 +56,39 @@
             transition: transform 0.05s ease-out; 
         }
 
-        /* STYLING ANGKA DAMAGE */
+        /* --- STYLING ANGKA DAMAGE (Fixed Position) --- */
         .damage-indicator {
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--damage-color);
             pointer-events: none;
             z-index: 20;
+            /* Memastikan teks tepat di tengah secara default */
+            left: 50%;
+            top: 50%;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
             animation: floatUp 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
         }
 
         @keyframes floatUp {
-            0% { opacity: 0; transform: translateY(0) scale(0.5); }
-            20% { opacity: 1; transform: translateY(-20px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1); }
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.5); 
+            }
+            20% { 
+                opacity: 1; 
+                transform: translate(-50%, -70%) scale(1.2); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, -150%) scale(1); 
+            }
+        }
+
+        /* Kelas untuk efek Motion Blur saat berpindah */
+        .is-teleporting {
+            filter: blur(8px) brightness(1.1) skewX(-10deg) !important;
         }
     </style>
 </head>
@@ -91,7 +108,7 @@
         let resetTimeout;
 
         function handleInteraction(e) {
-            createDamageIndicator(e);
+            createDamageIndicator(); // Disederhanakan karena posisi sudah fixed center
             checkOverload();
         }
 
@@ -103,51 +120,45 @@
 
         function checkOverload() {
             clickCount++;
-            
-            // Reset hitungan jika tidak ada klik dalam 1 detik
             clearTimeout(resetTimeout);
-            resetTimeout = setTimeout(() => {
-                clickCount = 0;
-            }, 1000);
+            resetTimeout = setTimeout(() => { clickCount = 0; }, 800);
 
-            // Jika tap sudah 5 kali berturut-turut
             if (clickCount >= 5) {
                 teleportLogo();
-                clickCount = 0; // Reset setelah kabur
+                clickCount = 0;
             }
         }
 
         function teleportLogo() {
-            // Hitung batas aman agar logo tidak keluar layar
-            const padding = 100;
+            const padding = 150;
             const maxX = window.innerWidth - padding;
             const maxY = window.innerHeight - padding;
             
-            // Koordinat acak
             const randomX = Math.random() * (maxX - padding) + padding;
             const randomY = Math.random() * (maxY - padding) + padding;
 
-            // Pindahkan wrapper
+            // Tambahkan class Motion Blur
+            logo.classList.add('is-teleporting');
+
             wrapper.style.left = `${randomX}px`;
             wrapper.style.top = `${randomY}px`;
             
-            // Efek visual saat kabur (sedikit buram karena cepat)
-            logo.style.filter = 'blur(4px) brightness(1.2)';
+            // Hapus class Motion Blur setelah animasi selesai
             setTimeout(() => {
-                logo.style.filter = 'drop-shadow(0 5px 10px rgba(0,0,0,0.1))';
+                logo.classList.remove('is-teleporting');
             }, 400);
         }
 
-        function createDamageIndicator(event) {
+        function createDamageIndicator() {
             const indicator = document.createElement('div');
             indicator.classList.add('damage-indicator');
             
             const damage = Math.floor(Math.random() * 10) + 1;
             indicator.innerText = `-${damage}`;
 
-            // Muncul di posisi klik/tap agar lebih akurat
-            indicator.style.left = `${Math.random() * 60 - 30}px`; 
-            indicator.style.top = `-20px`;
+            // Tambahkan sedikit variasi horizontal agar tidak tumpang tindih sempurna
+            const drift = (Math.random() - 0.5) * 60;
+            indicator.style.marginLeft = `${drift}px`;
 
             wrapper.appendChild(indicator);
 
