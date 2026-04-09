@@ -1,1 +1,41 @@
-<h1>hello World<h1>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tampilan Aset Logo</title>
+    <style>
+        :root {
+            /* Cukup ubah angka ini untuk memperbesar atau memperkecil */
+            --logo-size: 200px; 
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .logo-container img {
+            width: var(--logo-size);
+            height: auto; /* Menjaga proporsi gambar agar tidak gepeng */
+            display: block;
+            transition: transform 0.3s ease; /* Bonus: efek halus saat di-hover */
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="assets/images/KUlogo3d 2.png" alt="Logo KU 3D">
+    </div>
+
+</body>
+</html>
