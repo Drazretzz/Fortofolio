@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tampilan Aset Logo</title>
+    <title>Interaksi Logo KU 3D</title>
     <style>
         :root {
-            /* Cukup ubah angka ini untuk memperbesar atau memperkecil */
-            --logo-size: 5000px; 
+            /* --- MODIFIKASI UKURAN DI SINI --- */
+            /* Diubah dari 5000px menjadi 300px agar pas di layar */
+            --logo-size: 300px; 
+
+            /* --- KONFIGURASI ANIMASI --- */
+            /* Easing 'Cubic Bezier' memberikan efek membal yang elegan */
+            --easing-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-speed: 0.4s;
         }
 
         body {
@@ -15,20 +21,57 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #ededed; /* Sedikit lebih gelap agar logo 3D menonjol */
             margin: 0;
+            font-family: sans-serif;
+            overflow: hidden; /* Mencegah scrollbar muncul jika gambar terlalu besar */
+        }
+
+        .logo-container {
+            /* Container untuk kontrol posisi tambahan jika perlu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .logo-container img {
             width: var(--logo-size);
-            height: auto; /* Menjaga proporsi gambar agar tidak gepeng */
+            height: auto;
             display: block;
-            transition: transform 0.3s ease; /* Bonus: efek halus saat di-hover */
+            
+            /* --- PENGATURAN INTERAKSI KUNCI --- */
+            cursor: pointer; /* Menandakan ini bisa diklik/tap */
+            
+            /* User tidak bisa meng-highlight atau drag gambar */
+            user-select: none;
+            -webkit-user-drag: none;
+            
+            /* --- TRANSISI HALUS (KEADAAN NORMAL) --- */
+            /* Menggunakan cubic-bezier saat kursor menjauh atau tombol dilepas */
+            transition: transform var(--transition-speed) var(--easing-bouncy), 
+                        filter var(--transition-speed) ease;
+            
+            /* Sedikit shadow awal untuk efek 3D */
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
         }
 
+        /* --- STATE: HOVER (CUKUP SHADOW, AGAR FOKUS KE KLIK) --- */
         .logo-container img:hover {
-            transform: scale(1.05);
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15));
         }
+
+        /* --- STATE: ACTIVE (SAAT DITEKAN/DITAP) --- */
+        .logo-container img:active {
+            /* Memberikan efek 'kempes' atau tertekan */
+            transform: scale(0.92); 
+            
+            /* Opsional: Shadow menggelap sedikit */
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+            
+            /* Transisi sangat cepat saat ditekan agar responsif */
+            transition: transform 0.05s ease-out; 
+        }
+
     </style>
 </head>
 <body>
