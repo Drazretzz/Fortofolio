@@ -3,168 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Game Style - Motion Update</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    
+    <title>Video Transparan Okta</title>
     <style>
-        :root {
-            --logo-size: 300px; 
-            --easing-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-speed: 0.4s;
-            --damage-color: #ff4757;
-        }
-
         body {
-            height: 100vh;
-            background-color: #ededed;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            user-select: none;
-            position: relative;
-        }
-
-        .game-wrapper {
-            position: absolute;
-            width: var(--logo-size);
-            height: auto;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
+            /* Background gradasi biar kelihatan transparansinya */
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Easing Expo Out untuk perpindahan yang sangat halus */
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
-            z-index: 10;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: sans-serif;
         }
 
-        .logo-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            cursor: pointer;
-            -webkit-user-drag: none;
-            transition: transform var(--transition-speed) var(--easing-bouncy), 
-                        filter 0.3s ease,
-                        opacity 0.3s ease;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        .container {
+            text-align: center;
         }
 
-        .logo-container img:active {
-            transform: scale(0.92); 
-            transition: transform 0.05s ease-out; 
-        }
-
-        /* --- STYLING ANGKA DAMAGE (Fixed Position) --- */
-        .damage-indicator {
-            position: absolute;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--damage-color);
-            pointer-events: none;
-            z-index: 20;
-            /* Memastikan teks tepat di tengah secara default */
-            left: 50%;
-            top: 50%;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-            animation: floatUp 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
-        }
-
-        @keyframes floatUp {
-            0% { 
-                opacity: 0; 
-                transform: translate(-50%, -50%) scale(0.5); 
-            }
-            20% { 
-                opacity: 1; 
-                transform: translate(-50%, -70%) scale(1.2); 
-            }
-            100% { 
-                opacity: 0; 
-                transform: translate(-50%, -150%) scale(1); 
-            }
-        }
-
-        /* Kelas untuk efek Motion Blur saat berpindah */
-        .is-teleporting {
-            filter: blur(8px) brightness(1.1) skewX(-10deg) !important;
+        video {
+            width: 80%;
+            max-width: 500px;
+            /* Efek shadow biar makin estetik */
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
         }
     </style>
 </head>
 <body>
 
-    <div class="game-wrapper" id="game-wrapper">
-        <div class="logo-container">
-            <img src="assets/images/KUlogo3d 2.png" alt="Logo KU 3D" id="logo">
-        </div>
-    </div>
-
-    <script>
-        const logo = document.getElementById('logo');
-        const wrapper = document.getElementById('game-wrapper');
+    <div class="container">
+        <h1>Testing Video Transparan</h1>
         
-        let clickCount = 0;
-        let resetTimeout;
-
-        function handleInteraction(e) {
-            createDamageIndicator(); // Disederhanakan karena posisi sudah fixed center
-            checkOverload();
-        }
-
-        logo.addEventListener('mousedown', (e) => handleInteraction(e));
-        logo.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleInteraction(e.touches[0]);
-        });
-
-        function checkOverload() {
-            clickCount++;
-            clearTimeout(resetTimeout);
-            resetTimeout = setTimeout(() => { clickCount = 0; }, 800);
-
-            if (clickCount >= 5) {
-                teleportLogo();
-                clickCount = 0;
-            }
-        }
-
-        function teleportLogo() {
-            const padding = 150;
-            const maxX = window.innerWidth - padding;
-            const maxY = window.innerHeight - padding;
-            
-            const randomX = Math.random() * (maxX - padding) + padding;
-            const randomY = Math.random() * (maxY - padding) + padding;
-
-            // Tambahkan class Motion Blur
-            logo.classList.add('is-teleporting');
-
-            wrapper.style.left = `${randomX}px`;
-            wrapper.style.top = `${randomY}px`;
-            
-            // Hapus class Motion Blur setelah animasi selesai
-            setTimeout(() => {
-                logo.classList.remove('is-teleporting');
-            }, 400);
-        }
-
-        function createDamageIndicator() {
-            const indicator = document.createElement('div');
-            indicator.classList.add('damage-indicator');
-            
-            const damage = Math.floor(Math.random() * 10) + 1;
-            indicator.innerText = `-${damage}`;
-
-            // Tambahkan sedikit variasi horizontal agar tidak tumpang tindih sempurna
-            const drift = (Math.random() - 0.5) * 60;
-            indicator.style.marginLeft = `${drift}px`;
-
-            wrapper.appendChild(indicator);
-
-            setTimeout(() => { indicator.remove(); }, 800);
-        }
-    </script>
+        <video autoplay loop muted playsinline>
+            <source src="output.webm" type="video/webm">
+            Browser kamu nggak support video WebM.
+        </video>
+        
+        <p>Video ini transparan (Alpha Channel VP9)</p>
+    </div>
 
 </body>
 </html>
