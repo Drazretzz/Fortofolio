@@ -12,7 +12,8 @@
         }
 
         body {
-            background-color: #000000;
+            /* Hitam Soft (tidak pekat, tapi tidak abu-abu terang) */
+            background-color: #121212; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,21 +22,23 @@
         }
 
         .video-wrapper {
-            /* Kontrol ukuran di sini */
-            width: 50%;         /* Lebar video 50% dari lebar layar */
-            max-width: 400px;    /* Tapi jangan lebih dari 400px (biar gak kegedean di PC) */
+            /* Ukuran pas di tengah, tidak terlalu besar */
+            width: 45%; 
+            max-width: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         video {
-            width: 50%;        /* Mengikuti lebar video-wrapper */
-            height: auto;       /* Tinggi otomatis biar gak gepeng */
+            width: 50%;
+            height: auto;
             filter: none;
             outline: none;
             border: none;
             display: block;
+            /* Opsional: sedikit kehalusan pada rendering video */
+            mix-blend-mode: normal; 
         }
     </style>
 </head>
